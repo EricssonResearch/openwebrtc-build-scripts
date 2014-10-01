@@ -1,0 +1,30 @@
+--- Source/WTF/wtf/Platform.h.orig	2014-06-22 22:42:32.000000000 +0200
++++ Source/WTF/wtf/Platform.h	2014-06-22 23:27:43.000000000 +0200
+@@ -325,6 +325,11 @@
+ #define WTF_OS_AIX 1
+ #endif
+ 
++/* OS(ANDROID) - Android */
++#ifdef __ANDROID__
++#define WTF_OS_ANDROID 1
++#endif
++
+ /* OS(DARWIN) - Any Darwin-based OS, including Mac OS X and iPhone OS */
+ #ifdef __APPLE__
+ #define WTF_OS_DARWIN 1
+--- Source/WTF/wtf/MathExtras.h.orig	2014-05-26 08:45:37.000000000 +0200
++++ Source/WTF/wtf/MathExtras.h	2014-06-22 23:31:47.000000000 +0200
+@@ -67,6 +67,13 @@
+ const float piOverFourFloat = static_cast<float>(M_PI_4);
+ #endif
+ 
++#if OS(ANDROID)
++inline double log2(double num)
++{
++    return log(num) / log(2.0);
++}
++#endif
++
+ #if OS(DARWIN)
+ 
+ // Work around a bug in the Mac OS X libc where ceil(-0.1) return +0.

@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+PATH=~/.openwebrtc/bin:$PATH \
+    PYTHONPATH=~/.openwebrtc/lib/python2.7/site-packages:$PYTHONPATH \
+    check-webkit-style -f -readability/naming/underscores,-readability/enum_casing,-readability/parameter_name,-build/header_guard $@

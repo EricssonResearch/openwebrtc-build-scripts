@@ -1,0 +1,12 @@
+--- Source/WTF/wtf/Platform.h.orig	2014-06-18 00:14:29.000000000 +0200
++++ Source/WTF/wtf/Platform.h	2014-06-18 00:15:45.000000000 +0200
+@@ -540,7 +540,9 @@
+ 
+ #if OS(UNIX)
+ #define HAVE_ERRNO_H 1
++#if !defined(HAVE_LANGINFO_H)
+ #define HAVE_LANGINFO_H 1
++#endif
+ #define HAVE_MMAP 1
+ #define HAVE_SIGNAL_H 1
+ #define HAVE_STRINGS_H 1

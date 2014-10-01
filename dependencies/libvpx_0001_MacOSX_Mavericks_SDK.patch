@@ -1,0 +1,33 @@
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index c6c8660..06256d4 100755
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -718,9 +718,9 @@ process_common_toolchain() {
+                 [ $? -ne 0 ] && OSX_SKIP_DIR_CHECK=1
+             fi
+             if [ -z "${OSX_SKIP_DIR_CHECK}" ]; then
+-                OSX_SDK_ROOTS="${DEVELOPER_DIR}/SDKs"
++                OSX_SDK_ROOTS="${DEVELOPER_DIR}/Platforms/MacOSX.platform/Developer/SDKs"
+                 OSX_SDK_VERSIONS="MacOSX10.4u.sdk MacOSX10.5.sdk MacOSX10.6.sdk"
+-                OSX_SDK_VERSIONS="${OSX_SDK_VERSIONS} MacOSX10.7.sdk"
++                OSX_SDK_VERSIONS="${OSX_SDK_VERSIONS} MacOSX10.7.sdk MacOSX10.8.sdk MacOSX10.9.sdk"
+                 for v in ${OSX_SDK_VERSIONS}; do
+                     if [ -d "${OSX_SDK_ROOTS}/${v}" ]; then
+                         osx_sdk_dir="${OSX_SDK_ROOTS}/${v}"
+@@ -753,12 +753,12 @@ process_common_toolchain() {
+             add_ldflags "-mmacosx-version-min=10.7"
+             ;;
+         *-darwin12-*)
+-            add_cflags  "-mmacosx-version-min=10.8"
+-            add_ldflags "-mmacosx-version-min=10.8"
++            add_cflags  "-mmacosx-version-min=10.7"
++            add_ldflags "-mmacosx-version-min=10.7"
+             ;;
+         *-darwin13-*)
+-            add_cflags  "-mmacosx-version-min=10.9"
+-            add_ldflags "-mmacosx-version-min=10.9"
++            add_cflags  "-mmacosx-version-min=10.7"
++            add_ldflags "-mmacosx-version-min=10.7"
+             ;;
+     esac
+ 

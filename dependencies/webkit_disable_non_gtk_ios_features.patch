@@ -1,0 +1,11 @@
+--- Source/WTF/wtf/Platform.h.orig	2014-06-16 22:54:47.000000000 +0200
++++ Source/WTF/wtf/Platform.h	2014-06-16 22:55:10.000000000 +0200
+@@ -504,7 +504,7 @@
+ #define ENABLE_PURGEABLE_MEMORY 1
+ #endif
+ 
+-#if PLATFORM(IOS)
++#if PLATFORM(IOS) && !PLATFORM(GTK)
+ 
+ #define DONT_FINALIZE_ON_MAIN_THREAD 1
+ #define HAVE_READLINE 1
