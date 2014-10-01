@@ -110,7 +110,7 @@ setup_android_toolchain() {
                 echo "No adb found in path $PATH"
                 exit 1
             else
-                export DX="$(find $(dirname $adb_path)/../build-tools/[0-9]*/dx |tail -n 1)"
+                export DX="$(find $(dirname $adb_path)/../build-tools/*/dx |tail -n 1)"
             fi
         fi
 
