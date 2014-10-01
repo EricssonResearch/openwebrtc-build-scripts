@@ -104,6 +104,16 @@ setup_android_toolchain() {
             exit 1;
         fi
 
+        if [[ ${DX}x == x ]]; then
+            local adb_path="$(which adb)"
+            if [[ ${adb_path}x == x ]]; then
+                echo "No adb found in path $PATH"
+                exit 1
+            else
+                export DX="$(find $(dirname $adb_path)/../build-tools/*/dx |tail -n 1)"
+            fi
+        fi
+
         export ANDROID_NDK="$(dirname $(which ndk-build))"
         ANDROID_LEVEL="9"
         ANDROID_TOOLCHAIN_VERSION="4.8"
