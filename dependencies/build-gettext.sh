@@ -76,6 +76,7 @@ build(){
 
         export CFLAGS=${flags}
         export CXXFLAGS=${flags}
+        export CPPFLAGS=${flags}
 
         ${home}/$BUILD_DIR/configure \
             --prefix=${installdir} \
