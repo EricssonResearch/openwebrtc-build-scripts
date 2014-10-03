@@ -57,15 +57,23 @@ setup_ios_toolchain() {
         fi
 
         export PLATFORM_IOS_SDK="$PLATFORM_IOS/Developer/SDKs/iPhoneOS${SDK_IOS_VERSION}.sdk"
-        export CC="$(xcrun -sdk iphoneos -find clang)"
+        export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -miphoneos-version-min=${MIN_IOS_VERSION} -arch ${arch}"
+
+        export CC="$(xcrun -sdk iphoneos -find clang) ${PLATFORM_CFLAGS}"
         if [[ "x$CC" == x ]] ; then
             echo "No CC for ios build found"
             exit 1
         fi
 
+        export OBJC="$(xcrun -sdk iphoneos -find clang) ${PLATFORM_CFLAGS}"
+        if [[ "x$OBJC" == x ]] ; then
+            echo "No OBJC for ios build found"
+            exit 1
+        fi
+
         export CPP="$CC -E"
 
-        export CXX="$(xcrun -sdk iphoneos -find clang++)"
+        export CXX="$(xcrun -sdk iphoneos -find clang++) ${PLATFORM_CFLAGS}"
         if [[ "x$CXX" == x ]]; then
             echo "No CXX for ios build found"
             exit 1
@@ -83,7 +91,6 @@ setup_ios_toolchain() {
             exit 1
         fi
 
-        export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -miphoneos-version-min=${MIN_IOS_VERSION} -arch ${arch}"
         return 0
     else
             # Only on a Darwin OS can the iOS build be expected to succeed
@@ -153,13 +160,15 @@ setup_osx_toolchain() {
 
     local sdkroot="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
 
-    export CC="$(xcrun -sdk macosx -find clang)"
+    export PLATFORM_CFLAGS="-isysroot ${sdkroot} -mmacosx-version-min=10.7 -arch x86_64 -m64"
+
+    export CC="$(xcrun -sdk macosx -find clang) ${PLATFORM_CFLAGS}"
     if [[ "x$CC" == x ]] ; then
         echo "No CC for macosx build found" >&2
         exit 1
     fi
 
-    export OBJC="$(xcrun -sdk macosx -find clang)"
+    export OBJC="$(xcrun -sdk macosx -find clang) ${PLATFORM_CFLAGS}"
     if [[ "x$OBJC" == x ]] ; then
         echo "No OBJC for macosx build found" >&2
         exit 1
@@ -167,7 +176,7 @@ setup_osx_toolchain() {
 
     export CPP="$CC -E"
 
-    export CXX="$(xcrun -sdk macosx -find clang++)"
+    export CXX="$(xcrun -sdk macosx -find clang++) ${PLATFORM_CFLAGS}"
     if [[ "x$CXX" == x ]]; then
         echo "No CXX for macosx build found" >&2
         exit 1
@@ -186,7 +195,6 @@ setup_osx_toolchain() {
     fi
 
     unset CXXCPP AR NM RANLIB CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
-    export PLATFORM_CFLAGS="-isysroot ${sdkroot} -arch x86_64 -m64 -mmacosx-version-min=10.7"
     unset PLATFORM_LDFLAGS
 }
 
@@ -197,15 +205,23 @@ setup_ios-simulator_toolchain() {
     export PLATFORM_IOS_SDK=`find -s "$PLATFORM_IOS_SIM/Developer/SDKs" -iname iPhoneSimulator[7\|8]*.sdk -maxdepth 1 | tail -1`
     MIN_IOS_VERSION="5.0"
 
-    export CC="$(xcrun -sdk iphonesimulator -find clang)"
+    export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -miphoneos-version-min=${MIN_IOS_VERSION} -arch ${arch}"
+
+    export CC="$(xcrun -sdk iphonesimulator -find clang) ${PLATFORM_CFLAGS}"
     if [[ "x$CC" == x ]] ; then
         echo "No CC for ios simulator build found" >&2
         exit 1
     fi
 
+    export OBJC="$(xcrun -sdk iphonesimulator -find clang) ${PLATFORM_CFLAGS}"
+    if [[ "x$OBJC" == x ]] ; then
+        echo "No OBJC for ios simulator build found" >&2
+        exit 1
+    fi
+
     export CPP="$CC -E"
 
-    export CXX="$(xcrun -sdk iphonesimulator -find clang++)"
+    export CXX="$(xcrun -sdk iphonesimulator -find clang++) ${PLATFORM_CFLAGS}"
     if [[ "x$CXX" == x ]]; then
         echo "No CXX for ios simulator build found" >&2
         exit 1
@@ -223,5 +239,5 @@ setup_ios-simulator_toolchain() {
         exit 1
     fi
 
-    export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -miphoneos-version-min=${MIN_IOS_VERSION} -arch ${arch} -Wl,-no_compact_unwind -Qunused-arguments"
+    export PLATFORM_CFLAGS="${PLATFORM_CFLAGS} -Wl,-no_compact_unwind -Qunused-arguments"
 }
