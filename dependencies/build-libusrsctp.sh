@@ -28,8 +28,9 @@ build() {
     if [[ ${target_triple} == "arm-apple-darwin10" ]]; then
         local platform_configure_flags="--host=arm"
         mkdir -p include
-        cp -fR /usr/include/net include
-        cp -fR /usr/include/netinet include
+        local PLATFORM_IOS_HEADERS=`find -s "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs" -iname iPhoneSimulator[7\|8]*.sdk -maxdepth 1 | tail -1`
+        cp -fR ${PLATFORM_IOS_HEADERS}/usr/include/net include
+        cp -fR ${PLATFORM_IOS_HEADERS}/usr/include/netinet include
         export CFLAGS="$CFLAGS -I$builddir/include -D__APPLE_USE_RFC_2292 -U__APPLE__ -D__Userspace_os_Darwin"
     elif [[ $target_triple == "arm-linux-androideabi" ]]; then
         local platform_configure_flags="--host=$arch --disable-inet6"
