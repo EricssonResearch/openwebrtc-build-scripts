@@ -22,16 +22,6 @@ install_sources(){
     (
         cd $BUILD_DIR
         git reset --hard sdk-release-sdk-2013.6
-
-        # datagram iostreams, dtls
-        git remote add tester git://git.collabora.co.uk/git/user/tester/glib.git
-        git fetch tester datagram
-        git cherry-pick e1fdd59f08b3072464b5374b62146fd69014ef77
-        git cherry-pick 01233adcbbbe8ec5bceddff15e53474e35b8e57b
-        git cherry-pick 1b9649a845276ef687655f6d4f8f4b646e910c00
-        git cherry-pick 3f8fa3a610cb618992d7578122c6574a9eab1ac9
-        git cherry-pick 9fba9add9a3b17de5460379396005152444eea75
-        git cherry-pick d68ff5b869ec19e0e49c4509cbd3a5c46d8b91ce
     )
 }
 

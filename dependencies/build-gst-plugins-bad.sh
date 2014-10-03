@@ -23,13 +23,6 @@ install_sources() {
     (
         cd $BUILD_DIR
         git reset --hard $GST_VERSION
-
-        # dtls plugin
-        git remote add tester git://git.collabora.co.uk/git/user/tester/gst-plugins-bad.git
-        git fetch tester dtls
-        git cherry-pick -Xtheirs 07fc98c765117cc442dee412a3cd08cb6235a743
-        git cherry-pick 0409014cd264fc887f951172b7af7f7b5abf680b
-        git cherry-pick b65443e0bdcaf3edae219b7b8cdbd6b1997c6fdc
     )
 }
 

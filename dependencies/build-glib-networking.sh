@@ -20,21 +20,6 @@ install_sources() {
         cd $BUILD_DIR
         git reset --hard $GLIB_NETWORKING_VERSION
 
-        # dtls
-        git remote add tester git://git.collabora.co.uk/git/user/tester/glib-networking.git
-        git fetch tester dtls
-        git cherry-pick 6be4711c22053a0be84c19b0ad1e7020dc2793d4
-        git cherry-pick b2b006a81ece97c2331e46668cc33b56e63c97b1
-        git cherry-pick a0efd5a2a8854f9abdf37673f00f3e16795ff627
-        git cherry-pick 97aa561e99277c1e0586f1f20e2a29e8fe03f9ae
-        git checkout HEAD^ configure.ac
-        git add configure.ac
-        git commit --amend -C HEAD
-        git cherry-pick fb4fb47edc80b3c504dab2b9a78140b63f216afe
-        git cherry-pick f549a05ba3f985596d1cf0ccd7fd9fe6af350224
-        git cherry-pick fc943ddab73ba6033a37af914a0757bd0c83ad90
-        git cherry-pick a384bfa57ed58882658085288cc48d4aa08efd09
-
         # static modules
         git remote add gst-sdk git://anongit.freedesktop.org/gstreamer-sdk/glib-networking
         git fetch gst-sdk
