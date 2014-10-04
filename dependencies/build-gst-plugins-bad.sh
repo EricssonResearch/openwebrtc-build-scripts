@@ -141,8 +141,7 @@ build() {
 	    echo -e "all:\n\ninstall:\n" > docs/Makefile
 	    echo -e "all:\n\ninstall:\n" > tests/Makefile
 	} &&
-	ERROR_CFLAGS="" make && make install && \
-	cd ext/dtls && make && make install
+	ERROR_CFLAGS="" make && make install
 	)
 }
 
