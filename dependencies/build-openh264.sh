@@ -22,11 +22,6 @@ install_sources() {
     git add Makefile
     git commit --no-verify -m "Remove hard-coded installation PREFIX."
 
-    sed s/include\\/wels/include\\/openh264/g Makefile > Makefile.new
-    mv Makefile.new Makefile
-    git add Makefile
-    git commit --no-verify -m "Change install prefix to include/openh264."
-
     popd > /dev/null
 }
 

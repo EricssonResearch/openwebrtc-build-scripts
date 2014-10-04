@@ -131,7 +131,7 @@ build() {
         export GST_PREFIX="${installdir}/../gstreamer"
         export GST_LIBS="-L${installdir}/../gstreamer/lib -lgstreamer-1.0 "$GLIB_LIBS
         export OPENH264_LIBS="-L${installdir}/../openh264/lib -lopenh264"
-        export OPENH264_CFLAGS="-I${installdir}/../openh264/include/openh264"
+        export OPENH264_CFLAGS="-I${installdir}/../openh264/include"
         export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 "$GLIB_CFLAGS
         export GST_BASE_LIBS=$GST_LIBS" -lgstbase-1.0"
         export GST_CHECK_LIBS="$GST_LIBS -lgstcheck-1.0"
