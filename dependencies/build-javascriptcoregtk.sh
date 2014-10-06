@@ -16,7 +16,13 @@ check_preconditions() {
 install_sources() {
     curl -O http://webkitgtk.org/releases/webkitgtk-$WEBKITGTK_DOWNLOAD_VERSION.tar.xz
     curl -o webkit_threading_platform_mac.patch https://bug-58737-attachments.webkit.org/attachment.cgi?id=211348
-    curl https://android.googlesource.com/platform/external/chromium/+/d9f0c9b/android/execinfo.h?format=TEXT | base64 -D -o execinfo.h
+
+    if [[ $(uname) == "Linux" ]]; then
+      curl https://android.googlesource.com/platform/external/chromium/+/d9f0c9b/android/execinfo.h?format=TEXT | base64 -d > execinfo.h
+    else
+      curl https://android.googlesource.com/platform/external/chromium/+/d9f0c9b/android/execinfo.h?format=TEXT | base64 -D -o execinfo.h
+    fi
+
     unxz -c webkitgtk-$WEBKITGTK_DOWNLOAD_VERSION.tar.xz | tar xv
     pushd webkitgtk-$WEBKITGTK_VERSION > /dev/null
     tail -22 ../webkit_threading_platform_mac.patch | patch -p1 || die "$0 - Could not apply patch."
