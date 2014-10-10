@@ -1,0 +1,27 @@
+From 75a3bcd5008f6e5f86e8430acba10e115724fd6c Mon Sep 17 00:00:00 2001
+From: Alessandro Decina <alessandro.d@gmail.com>
+Date: Fri, 10 Oct 2014 16:00:38 +0200
+Subject: [PATCH] agent: enable name resolution in nice_address_set_from_string
+
+---
+ agent/address.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/agent/address.c b/agent/address.c
+index a8d9c76..a02fd4a 100644
+--- a/agent/address.c
++++ b/agent/address.c
+@@ -206,10 +206,7 @@ nice_address_set_from_string (NiceAddress *addr, const gchar *str)
+ 
+   memset (&hints, 0, sizeof (hints));
+ 
+-  /* AI_NUMERICHOST prevents getaddrinfo() from doing DNS resolution. */
+   hints.ai_family = AF_UNSPEC;
+-  hints.ai_flags = AI_NUMERICHOST;
+-
+   if (getaddrinfo (str, NULL, &hints, &res) != 0)
+     return FALSE;  /* invalid address */
+ 
+-- 
+1.8.5.2 (Apple Git-48)
+

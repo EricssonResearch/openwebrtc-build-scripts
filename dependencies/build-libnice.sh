@@ -17,6 +17,11 @@ install_sources() {
     git clone git://anongit.freedesktop.org/libnice/libnice $BUILD_DIR
     pushd $BUILD_DIR > /dev/null
     git reset --hard $LIBNICE_VERSION
+
+    # REMOVEME: The following patch enables synchronous DNS resolution
+    # This should instead be implemented in the libnice user code using GResolver
+    git am ../libnice_enable_dns.patch
+
     popd > /dev/null
 }
 
