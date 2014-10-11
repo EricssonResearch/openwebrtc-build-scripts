@@ -13,7 +13,7 @@ check_preconditions() {
 
 install_sources() {
     # no fast build, get source.
-    curl --connect-timeout 5 -f -O http://zlib.net/zlib-$ZLIB_VERSION.tar.gz
+    curl --connect-timeout 30 -f -O http://zlib.net/zlib-$ZLIB_VERSION.tar.gz
     tar xvzf zlib-$ZLIB_VERSION.tar.gz
 }
 
