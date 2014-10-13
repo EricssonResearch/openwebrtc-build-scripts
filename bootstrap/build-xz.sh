@@ -53,7 +53,7 @@ build() {
 
     # build xz
     pushd xz-$XZ_VERSION > /dev/null
-    ./configure --prefix=$PREFIX && make && make install || die "$0 -- Could not build xz."
+    ./configure --prefix=$PREFIX && make && make install || die "$0 -- Could not build xz."
     popd > /dev/null
 
     popd > /dev/null
