@@ -35,7 +35,12 @@ move_failed_build_dir(){
     fi
 }
 
-trap 'move_failed_build_dir' ERR
+handle_build_termination(){
+    move_failed_build_dir
+    exit 1
+}
+
+trap 'handle_build_termination' TERM
 
 help_engine(){
     echo help for engine_sh
@@ -316,9 +321,11 @@ if [[ $do_build == "yes" ]]; then
 	    (
 		setup_${p}_toolchain ${arch} ${triple} && {
 		    setup ${arch} ${triple}
-		    build ${arch} ${triple} && mark_build_successful || exit
-                } || true
-		) || exit
+		    build ${arch} ${triple} && mark_build_successful || exit 1
+                } || true ) || {
+                echo "Failed building...${BUILD_DIR}"
+                kill $$
+            }
 	fi
     done
 fi
