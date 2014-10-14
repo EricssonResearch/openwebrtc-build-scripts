@@ -1,19 +1,19 @@
 show_help(){
-    echo "Usage: $0 { [-h] [-f] [-c] [-p] [-b] [-i] [-r] | [-d] | [-m] | [-D] | [-B]} <platforms>"
-    echo " -f : Fast mode. Do not download, unpack, check out or patch code. This cannot be combined with -c"
+    echo "Usage: $0 [-h] [-f] [-c] [-C] [-p] [-b] [-i] [-m] [-D] [-B] (-r | -d) <platform ...>"
     echo " -h : Help. Shows this text and exits"
+    echo " -f : Fast mode. Do not download, unpack, check out or patch code. This cannot be combined with -c"
     echo " -c : Clean builds. Remove old builds. If platforms are given, only those platforms are affected, otherwise all platforms are affected"
     echo " -C : Clean sources. Remove old sources. This implies removing old builds aswell for all platforms, even if platforms are given."
     echo " -p : Check Preconditions and exit"
     echo " -b : Build. This options is implicit, but must be given explicitely when -c is used."
     echo " -i : Install sources only, don't build"
-    echo " -r : Build release optimized code if possible"
-    echo " -d : Build debug optimized code if possible"
     echo " -m : Generate makefile fragment for building this part of the code. Mutually exclusive with all other options"
-    echo " -n : Dryrun. Do nothing, but explain what would be done"
     echo " -D : Debug. Be verbose about how things happen"
     echo " -B : Show the build directory and exit"
-    echo " <platforms> list of platforms to build for, currently ios and android are supported."
+    echo " -r : Build release optimized code if possible"
+    echo " -d : Build debug optimized code if possible"
+    echo " <platform ...> A space separated list of platforms to build for, currently ios and android are supported for"
+    echo "                dependencies. Your native platform (osx or linux) is the choice for bootstrap"
 }
 
 die(){
