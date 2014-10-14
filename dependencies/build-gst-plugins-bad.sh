@@ -23,6 +23,9 @@ install_sources() {
     (
         cd $BUILD_DIR
         git reset --hard $GST_VERSION
+
+        # h264parse: make sure to put profile/level into the caps
+        git cherry-pick 1dd36b7d5a30ced04c928e09fa888a78bda0eca2
     )
 }
 
