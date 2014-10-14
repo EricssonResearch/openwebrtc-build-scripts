@@ -8,7 +8,7 @@ setup_ios_toolchain() {
 
     if [[ $(uname) == Darwin ]]; then
 
-        echo "Setting up toolchain for ios."
+        echo "Setting up toolchain for ios." >&2
 
         local arch=$1
         local triple=$2
@@ -24,6 +24,7 @@ setup_ios_toolchain() {
         # Some patches of iOS related code needs this path to locate a patch
         PLATFORM_IOS_SIM=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
 
+        # FIXME: What's the lowest SDK that we can expect to work? Coule we save people from lots of work by limiting what is allowed here?
         MIN_IOS_VERSION="5.0"
         if [ -z $SDK_IOS_VERSION ]
         then
@@ -106,6 +107,8 @@ setup_ios_toolchain() {
 setup_android_toolchain() {
 
     if [[ $(uname) == Darwin || $(uname) == Linux ]]; then
+
+        echo "Setting up toolchain for linux." >&2
 
         local arch=$1
         local triple=$2
