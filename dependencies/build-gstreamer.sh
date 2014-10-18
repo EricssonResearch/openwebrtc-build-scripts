@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4.3"
+GST_VERSION="1.4"
 LIBFFI_VERSION="3.0.13"
 LIBXML2_VERSION="2.7.8"
 

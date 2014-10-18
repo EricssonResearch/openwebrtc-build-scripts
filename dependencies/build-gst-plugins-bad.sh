@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4.3"
+GST_VERSION="1.4"
 LIBICONV_VERSION="1.14"
 LIBXML2_VERSION="2.7.8"
 ORC_VERSION="0.4.22"
@@ -23,9 +23,6 @@ install_sources() {
     (
         cd $BUILD_DIR
         git reset --hard $GST_VERSION
-
-        # h264parse: make sure to put profile/level into the caps
-        git cherry-pick 1dd36b7d5a30ced04c928e09fa888a78bda0eca2
     )
 }
 
