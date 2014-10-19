@@ -205,7 +205,7 @@ setup_ios-simulator_toolchain() {
     export PLATFORM_IOS_SDK=`find -s "$PLATFORM_IOS_SIM/Developer/SDKs" -iname iPhoneSimulator[7\|8]*.sdk -maxdepth 1 | tail -1`
     MIN_IOS_VERSION="5.0"
 
-    export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -miphoneos-version-min=${MIN_IOS_VERSION} -arch ${arch}"
+    export PLATFORM_CFLAGS="-isysroot ${PLATFORM_IOS_SDK} -mios-simulator-version-min=${MIN_IOS_VERSION} -arch ${arch}"
 
     export CC="$(xcrun -sdk iphonesimulator -find clang) ${PLATFORM_CFLAGS}"
     if [[ "x$CC" == x ]] ; then
