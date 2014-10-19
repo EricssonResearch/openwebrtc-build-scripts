@@ -12,7 +12,7 @@ check_preconditions() {
 }
 
 install_sources() {
-    curl -O http://download.icu-project.org/files/icu4c/${ICU_VERSION/_/.}/icu4c-$ICU_VERSION-src.tgz
+    curl -LO http://download.icu-project.org/files/icu4c/${ICU_VERSION/_/.}/icu4c-$ICU_VERSION-src.tgz
     tar xzf icu4c-$ICU_VERSION-src.tgz
 }
 
