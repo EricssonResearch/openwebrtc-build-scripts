@@ -20,13 +20,17 @@ setup_ios_toolchain() {
         PLATFORM_IOS_SDK_70=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk
         PLATFORM_IOS_SDK_71=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk
         PLATFORM_IOS_SDK_80=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.0.sdk
+        PLATFORM_IOS_SDK_81=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk
         # Some patches of iOS related code needs this path to locate a patch
         PLATFORM_IOS_SIM=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
 
         MIN_IOS_VERSION="5.0"
         if [ -z $SDK_IOS_VERSION ]
         then
-            if [ -d $PLATFORM_IOS_SDK_80 ]
+            if [ -d $PLATFORM_IOS_SDK_81 ]
+            then
+                SDK_IOS_VERSION="8.1"
+            elif [ -d $PLATFORM_IOS_SDK_80 ]
             then
                 SDK_IOS_VERSION="8.0"
             elif [ -d $PLATFORM_IOS_SDK_71 ]
