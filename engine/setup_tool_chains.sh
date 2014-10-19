@@ -162,7 +162,31 @@ setup_linux_toolchain() {
 
 setup_osx_toolchain() {
 
-    local sdkroot="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"
+    PLATFORM_OSX=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform
+    PLATFORM_OSX_SDK_10_9=$PLATFORM_OSX/Developer/SDKs/MacOSX10.9.sdk
+    PLATFORM_OSX_SDK_10_10=$PLATFORM_OSX/Developer/SDKs/MacOSX10.10.sdk
+
+    if [ -z $SDK_OSX_VERSION ]
+    then
+        if [ -d $PLATFORM_OSX_SDK_10_10 ]
+        then
+            SDK_OSX_VERSION="10.10"
+        elif [ -d $PLATFORM_OSX_SDK_10_9 ]
+        then
+            SDK_OSX_VERSION="10.9"
+        else
+            echo "ERROR: No SDK detected, looking in $PLATFORM_OSX"
+            exit 1
+        fi
+    else
+        if ! [ -d $PLATFORM_OSX/Developer/SDKs/MacOSX${SDK_OSX_VERSION}.sdk ]
+        then
+            echo "ERROR: Could not find specified SDK direction, $PLATFORM_OSX/Developer/SDKs/MacOSX${SDK_OSX_VERSION}.sdk"
+            exit 1
+        fi
+    fi
+
+    local sdkroot="$PLATFORM_OSX/Developer/SDKs/MacOSX${SDK_OSX_VERSION}.sdk"
 
     export PLATFORM_CFLAGS="-isysroot ${sdkroot} -mmacosx-version-min=10.7 -arch x86_64 -m64"
 
