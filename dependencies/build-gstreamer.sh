@@ -16,7 +16,7 @@ check_preconditions() {
 install_sources(){
     git clone git://anongit.freedesktop.org/git/gstreamer/gstreamer $BUILD_DIR
     pushd $BUILD_DIR > /dev/null
-    git reset --hard $GST_VERSION
+    git reset --hard origin/$GST_VERSION
 
     popd > /dev/null
 

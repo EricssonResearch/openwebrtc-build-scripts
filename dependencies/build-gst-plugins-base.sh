@@ -17,7 +17,7 @@ install_sources(){
     git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base $BUILD_DIR
     (
         cd $BUILD_DIR
-        git reset --hard $GST_VERSION
+        git reset --hard origin/$GST_VERSION
 
         # videoscale: Add NV21 support
         git cherry-pick 8cab1ab5fca0e0084141525f89a8d703ea8dc285

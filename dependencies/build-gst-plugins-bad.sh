@@ -22,7 +22,7 @@ install_sources() {
     git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad $BUILD_DIR
     (
         cd $BUILD_DIR
-        git reset --hard $GST_VERSION
+        git reset --hard origin/$GST_VERSION
     )
 }
 
