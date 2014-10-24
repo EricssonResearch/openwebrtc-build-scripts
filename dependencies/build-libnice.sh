@@ -21,6 +21,7 @@ install_sources() {
     # REMOVEME: The following patch enables synchronous DNS resolution
     # This should instead be implemented in the libnice user code using GResolver
     git am ../libnice_enable_dns.patch
+    git am ../libnice_sink_wait_candidates.patch
 
     popd > /dev/null
 }

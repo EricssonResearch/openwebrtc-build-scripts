@@ -1,0 +1,176 @@
+From 8346e6224e3d12802b6713f9a0c255c6e6e1ef96 Mon Sep 17 00:00:00 2001
+From: Alessandro Decina <alessandro.d@gmail.com>
+Date: Fri, 24 Oct 2014 15:50:54 +0200
+Subject: [PATCH] nicesink: wait for the agent to be configured with a
+ candidate pair
+
+This makes it so that buffers pushed while the agent is gathering candidates
+don't get lost in the void. This is useful to speed up DTLS handshake with a
+pipeline like ... !  dtls-encoder ! ... ! nicesink, to avoid dropping DTLS
+messages and avoid triggering DTLS retransmission (which does exponential
+backoff).
+---
+ agent/agent.c     |  4 +++-
+ gst/gstnicesink.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ gst/gstnicesink.h |  1 +
+ 3 files changed, 69 insertions(+), 7 deletions(-)
+
+diff --git a/agent/agent.c b/agent/agent.c
+index 79651ba..1efe7bc 100644
+--- a/agent/agent.c
++++ b/agent/agent.c
+@@ -4391,7 +4391,9 @@ nice_agent_send_messages_nonblocking_internal (
+     }
+   } else {
+     /* Socket isn’t properly open yet. */
+-    n_sent = 0;  /* EWOULDBLOCK */
++    g_set_error_literal (&child_error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED,
++        g_strerror (EAGAIN));
++    n_sent = -1;
+   }
+ 
+   /* Handle errors and cancellations. */
+diff --git a/gst/gstnicesink.c b/gst/gstnicesink.c
+index 80cca40..1f8b772 100644
+--- a/gst/gstnicesink.c
++++ b/gst/gstnicesink.c
+@@ -56,6 +56,15 @@ static gboolean
+ gst_nice_sink_unlock_stop (GstBaseSink *basesink);
+ 
+ static void
++_new_selected_pair (
++    NiceAgent *agent,
++    guint stream_id,
++    guint component_id,
++    gpointer local,
++    gpointer remote,
++    GstNiceSink *sink);
++
++static void
+ _reliable_transport_writable (
+     NiceAgent *agent,
+     guint stream_id,
+@@ -182,6 +191,41 @@ _reliable_transport_writable (NiceAgent *agent, guint stream_id,
+   GST_OBJECT_UNLOCK (sink);
+ }
+ 
++static void
++_new_selected_pair (NiceAgent *agent, guint stream_id,
++    guint component_id, gpointer local, gpointer remote, GstNiceSink *sink)
++{
++  GST_OBJECT_LOCK (sink);
++  if (stream_id == sink->stream_id && component_id == sink->component_id) {
++    g_cond_broadcast (&sink->writable_cond);
++  }
++  GST_OBJECT_UNLOCK (sink);
++}
++
++static gint
++_agent_send (
++  NiceAgent *agent,
++  guint stream_id,
++  guint component_id,
++  guint len,
++  const gchar *buf,
++  GError **error)
++{
++  GOutputVector local_buf = { buf, len };
++  NiceOutputMessage local_message = { &local_buf, 1 };
++  gint n_sent_bytes;
++
++  g_return_val_if_fail (NICE_IS_AGENT (agent), -1);
++  g_return_val_if_fail (stream_id >= 1, -1);
++  g_return_val_if_fail (component_id >= 1, -1);
++  g_return_val_if_fail (buf != NULL, -1);
++
++  n_sent_bytes = nice_agent_send_messages_nonblocking (agent,
++      stream_id, component_id, &local_message, 1, NULL, error);
++
++  return n_sent_bytes;
++}
++
+ static GstFlowReturn
+ gst_nice_sink_render (GstBaseSink *basesink, GstBuffer *buffer)
+ {
+@@ -190,6 +234,8 @@ gst_nice_sink_render (GstBaseSink *basesink, GstBuffer *buffer)
+   gint ret;
+   gchar *data = NULL;
+   guint size = 0;
++  GError *error = NULL;
++  gboolean again = FALSE;
+   GstFlowReturn flow_ret = GST_FLOW_OK;
+ 
+ #if GST_CHECK_VERSION (1,0,0)
+@@ -205,13 +251,18 @@ gst_nice_sink_render (GstBaseSink *basesink, GstBuffer *buffer)
+ 
+   GST_OBJECT_LOCK (nicesink);
+   do {
+-    ret = nice_agent_send (nicesink->agent, nicesink->stream_id,
+-        nicesink->component_id, size - written, data + written);
++    ret = _agent_send (nicesink->agent, nicesink->stream_id,
++        nicesink->component_id, size - written, data + written, &error);
+     if (ret > 0)
+       written += ret;
+ 
+-    if (nicesink->reliable && written < size)
++    again = written < size && (nicesink->reliable ||
++        g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED));
++    if (error)
++      g_error_free (error);
++    if (again)
+       g_cond_wait (&nicesink->writable_cond, GST_OBJECT_GET_LOCK (nicesink));
++
+     if (nicesink->flushing) {
+ #if GST_CHECK_VERSION (1,0,0)
+       flow_ret = GST_FLOW_FLUSHING;
+@@ -220,7 +271,7 @@ gst_nice_sink_render (GstBaseSink *basesink, GstBuffer *buffer)
+ #endif
+       break;
+     }
+-  } while (nicesink->reliable && written < size);
++  } while (again);
+   GST_OBJECT_UNLOCK (nicesink);
+ 
+ #if GST_CHECK_VERSION (1,0,0)
+@@ -259,9 +310,14 @@ gst_nice_sink_dispose (GObject *object)
+ {
+   GstNiceSink *sink = GST_NICE_SINK (object);
+ 
+-  if (sink->agent && sink->writable_id)
+-    g_signal_handler_disconnect (sink->agent, sink->writable_id);
++  if (sink->agent) {
++    if (sink->writable_id)
++      g_signal_handler_disconnect (sink->agent, sink->writable_id);
++    if (sink->new_selected_pair_id)
++      g_signal_handler_disconnect (sink->agent, sink->new_selected_pair_id);
++  }
+   sink->writable_id = 0;
++  sink->new_selected_pair_id = 0;
+   g_clear_object (&sink->agent);
+ 
+   g_cond_clear (&sink->writable_cond);
+@@ -287,6 +343,9 @@ gst_nice_sink_set_property (
+       } else {
+         sink->agent = g_value_dup_object (value);
+         g_object_get (sink->agent, "reliable", &sink->reliable, NULL);
++        sink->new_selected_pair_id = g_signal_connect (sink->agent,
++            "new-selected-pair-full",
++            (GCallback) _new_selected_pair, sink);
+         if (sink->reliable)
+           sink->writable_id = g_signal_connect (sink->agent,
+               "reliable-transport-writable",
+diff --git a/gst/gstnicesink.h b/gst/gstnicesink.h
+index 9529f64..2ff0867 100644
+--- a/gst/gstnicesink.h
++++ b/gst/gstnicesink.h
+@@ -68,6 +68,7 @@ struct _GstNiceSink
+   gboolean reliable;
+   GCond writable_cond;
+   gulong writable_id;
++  gulong new_selected_pair_id;
+   gboolean flushing;
+ };
+ 
+-- 
+1.9.3 (Apple Git-50)
+
