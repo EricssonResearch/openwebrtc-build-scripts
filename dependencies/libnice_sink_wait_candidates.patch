@@ -1,4 +1,4 @@
-From 8346e6224e3d12802b6713f9a0c255c6e6e1ef96 Mon Sep 17 00:00:00 2001
+From caab280c7b6e2ac9cc3a4c643146b391f56f335b Mon Sep 17 00:00:00 2001
 From: Alessandro Decina <alessandro.d@gmail.com>
 Date: Fri, 24 Oct 2014 15:50:54 +0200
 Subject: [PATCH] nicesink: wait for the agent to be configured with a
@@ -31,7 +31,7 @@ index 79651ba..1efe7bc 100644
  
    /* Handle errors and cancellations. */
 diff --git a/gst/gstnicesink.c b/gst/gstnicesink.c
-index 80cca40..1f8b772 100644
+index 80cca40..b9966cb 100644
 --- a/gst/gstnicesink.c
 +++ b/gst/gstnicesink.c
 @@ -56,6 +56,15 @@ static gboolean
@@ -115,8 +115,8 @@ index 80cca40..1f8b772 100644
 -    if (nicesink->reliable && written < size)
 +    again = written < size && (nicesink->reliable ||
 +        g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED));
-+    if (error)
-+      g_error_free (error);
++    g_clear_error (&error);
++
 +    if (again)
        g_cond_wait (&nicesink->writable_cond, GST_OBJECT_GET_LOCK (nicesink));
 +
