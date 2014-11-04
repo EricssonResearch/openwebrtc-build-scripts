@@ -129,6 +129,7 @@ build(){
             --disable-compile-warnings \
             --disable-libelf \
             --disable-dependency-tracking \
+            --disable-dtrace \
             --disable-modular-tests ${extra_configure_flags} \
 	    && { \
             echo -e "all:\n\ninstall:\n" > docs/Makefile
