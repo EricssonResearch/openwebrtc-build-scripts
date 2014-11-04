@@ -40,6 +40,8 @@ build() {
     export GMODULE_LIBS=$GLIB_LIBS
     export GIO_CFLAGS=$GLIB_CFLAGS
     export GIO_LIBS=$GLIB_LIBS
+    export GIO_UNIX_CFLAGS="-I${installdir}/../glib/include/gio-unix-2.0 -I${installdir}/../glib/lib/gio-unix-2.0/include"
+    export GIO_UNIX_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgobject-2.0 -lgmodule-2.0 -lgio-2.0"
     export SCANNER_CFLAGS=$GLIB_CFLAGS
     export SCANNER_LIBS=$GLIB_LIBS
     export GIREPO_CFLAGS=$GLIB_CFLAGS
@@ -61,6 +63,8 @@ build() {
     ln -s `which g-ir-scanner` g-ir-scanner
     cp $HOME/.openwebrtc/lib/gobject-introspection/giscanner/_giscanner.so .
 
+    sed -i -e 's:AM_CHECK_PYTHON_HEADERS.*::' configure.ac
+
     ./autogen.sh \
         --prefix=${installdir} \
         --host=${triple} \
@@ -71,6 +75,7 @@ build() {
     && cp -f girepository/gitypelib-internal.h $installdir/include/gobject-introspection-1.0 \
     && cp -f girepository/girmodule.h $installdir/include/gobject-introspection-1.0 \
     && cp -f girepository/girparser.h $installdir/include/gobject-introspection-1.0 \
+    && cp -f girepository/girepository.h $installdir/include/gobject-introspection-1.0 \
     && cp -f .libs/libgirepository-internals.a $installdir/lib
 
     mkdir -p  ${installdir}/include/gobject-introspection-1.0/gir
