@@ -16,10 +16,10 @@ for p in ios android osx linux ios_simulator; do
             echo "../../openwebrtc"
             rm -rf ../../openwebrtc/openwebrtc-deps-$plat/
             tar -C ../../openwebrtc -xzf openwebrtc-deps-$plat.tgz || exit 1
-        elif [[ -d ../../../openwebrtc ]]; then
-            echo "../../../openwebrtc"
-            rm -rf ../../../openwebrtc/openwebrtc-deps-$plat/
-            tar -C ../../../openwebrtc -xzf openwebrtc-deps-$plat.tgz || exit 1
+        elif [[ -f ../../libopenwebrtc.exp ]]; then
+            echo "../../"
+            rm -rf ../../openwebrtc-deps-$plat/
+            tar -C ../../ -xzf openwebrtc-deps-$plat.tgz || exit 1
         fi
     fi
 done
