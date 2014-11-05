@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4"
+GST_VERSION="afcc0b3c50815c9e7e85071b341f50d5ed09e13c"
 LIBXML2_VERSION="2.7.8"
 ORC_VERSION="0.4.22"
 
@@ -17,10 +17,7 @@ install_sources(){
     git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base $BUILD_DIR
     (
         cd $BUILD_DIR
-        git reset --hard origin/$GST_VERSION
-
-        # videoscale: Add NV21 support
-        git cherry-pick 8cab1ab5fca0e0084141525f89a8d703ea8dc285
+        git reset --hard $GST_VERSION
     )
 }
 
@@ -72,7 +69,7 @@ build() {
 	export GLIB_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0"
         export GIO_CFLAGS=$GLIB_CFLAGS
         export GIO_LIBS="-L${installdir}/../glib/lib -lgio-2.0"
-        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 "$GLIB_CFLAGS
+        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 -I${installdir}/../gstreamer/lib/gstreamer-1.0/include "$GLIB_CFLAGS
         export GST_LIBS="-L${installdir}/../gstreamer/lib -lgstreamer-1.0 "$GLIB_LIBS
         export GST_BASE_CFLAGS=$GST_CFLAGS
         export GST_BASE_LIBS=$GST_LIBS" -lgstbase-1.0"

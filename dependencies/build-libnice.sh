@@ -67,7 +67,7 @@ build() {
 	export CFLAGS="$CFLAGS $PLATFORM_CFLAGS -I${installdir}/../libxml2-${LIBXML2_VERSION}/include/libxml2"
 	export LIBS="-L${installdir}/../libxml2-${LIBXML2_VERSION}/lib -lxml2"
         export GLIB_CFLAGS="-I${installdir}/../glib/include/glib-2.0 -I${installdir}/../glib/lib/glib-2.0/include -DG_DISABLE_CAST_CHECKS"
-        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 $GLIB_CFLAGS"
+        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 -I${installdir}/../gstreamer/lib/gstreamer-1.0/include "$GLIB_CFLAGS
         export GLIB_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0"
         if [[ ${target_triple} =~ (i386|arm)"-apple-darwin10" ]]; then
             local platform_configure_flags="--disable-introspection"

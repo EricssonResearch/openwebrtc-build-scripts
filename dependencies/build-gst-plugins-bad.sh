@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4"
+GST_VERSION="1200f2f94bfaaffb8e56b9e7bb8eca34c7a765fc"
 LIBICONV_VERSION="1.14"
 LIBXML2_VERSION="2.7.8"
 ORC_VERSION="0.4.22"
@@ -22,7 +22,7 @@ install_sources() {
     git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad $BUILD_DIR
     (
         cd $BUILD_DIR
-        git reset --hard origin/$GST_VERSION
+        git reset --hard $GST_VERSION
     )
 }
 
@@ -83,7 +83,7 @@ build() {
 	export GLIB_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0"
 	export GIO_CFLAGS=$GLIB_CFLAGS
 	export GIO_LIBS="-L${installdir}/../glib/lib -lgio-2.0"
-	export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 "$GLIB_CFLAGS
+	export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 -I${installdir}/../gstreamer/lib/gstreamer-1.0/include "$GLIB_CFLAGS
 	export GST_LIBS="-L${installdir}/../gstreamer/lib -lgstreamer-1.0 "$GLIB_LIBS
 	export GST_BASE_CFLAGS=$GST_CFLAGS
 	export GST_BASE_LIBS=$GST_LIBS" -lgstbase-1.0"
@@ -95,6 +95,8 @@ build() {
 	export GST_GDP_LIBS=$GST_LIBS" -lgstdataprotocol-1.0"
 	export GST_PREFIX="${installdir}/../gstreamer"
 	export GST_PLUGINS_DIR="${GST_PREFIX}/lib/gstreamer-1.0"
+        export OPENH264_LIBS="-L${installdir}/../openh264/lib -lopenh264"
+        export OPENH264_CFLAGS="-I${installdir}/../openh264/include"
 	export OPUS_CFLAGS="-I${installdir}/../opus-${OPUS_VERSION}/include"
 	export OPUS_LIBS="-L${installdir}/../opus-${OPUS_VERSION}/lib -lopus"
 	export SRTP_CFLAGS="-I${installdir}/../libsrtp/include -I${installdir}/../openssl-$OPENSSL_VERSION/include"
@@ -103,9 +105,9 @@ build() {
 	export ORC_LIBS="-L${installdir}/../orc-${ORC_VERSION}/lib -lorc-0.4"
 	export XML_CFLAGS="-I${installdir}/../libxml2-${LIBXML2_VERSION}/include/libxml2"
 	export XML_LIBS="-L${installdir}/../libxml2-${LIBXML2_VERSION}/lib -lxml2"
-	export CFLAGS="$CFLAGS $XML_CFLAGS $SRTP_CFLAGS"
+	export CFLAGS="$CFLAGS $XML_CFLAGS $SRTP_CFLAGS $OPENH264_CFLAGS"
 	export CXXFLAGS="$CFLAGS"
-	export LDFLAGS="$LDFLAGS $XML_LIBS $SRTP_LIBS"
+	export LDFLAGS="$LDFLAGS $XML_LIBS $SRTP_LIBS $OPENH264_LIBS"
 	export OBJCFLAGS=$CFLAGS
 	export GST_PLUGINS_BASE_CFLAGS="-I${installdir}/../gst-plugins-base/include/gstreamer-1.0"
 	export GST_PLUGINS_BASE_LIBS="-L${installdir}/../gst-plugins-base/lib -lgstvideo-1.0"

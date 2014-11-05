@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4"
+GST_VERSION="f2f16636779aa9e24dde0baaa82d2f01dd73d822"
 LIBXML2_VERSION="2.7.8"
 ORC_VERSION="0.4.22"
 LIBICONV_VERSION="1.14"
@@ -18,7 +18,7 @@ install_sources(){
     git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good $BUILD_DIR
     (
         cd $BUILD_DIR
-        git reset --hard origin/$GST_VERSION
+        git reset --hard $GST_VERSION
     )
 }
 
@@ -73,7 +73,7 @@ build() {
         export GLIB_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0"
         export GIO_CFLAGS=$GLIB_CFLAGS
         export GIO_LIBS="-L${installdir}/../glib/lib -lgio-2.0"
-        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 "$GLIB_CFLAGS
+        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 -I${installdir}/../gstreamer/lib/gstreamer-1.0/include "$GLIB_CFLAGS
         export GST_LIBS="-L${installdir}/../gstreamer/lib -lgstreamer-1.0 "$GLIB_LIBS
         export GST_BASE_CFLAGS=$GST_CFLAGS
         export GST_BASE_LIBS=$GST_LIBS" -lgstbase-1.0"

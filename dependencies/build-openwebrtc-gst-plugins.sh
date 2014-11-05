@@ -123,16 +123,15 @@ build() {
         export GLIB_LIBS="-L${installdir}/../glib/lib -lglib-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0"
         export GST_PLUGINS_BASE_CFLAGS="-I${installdir}/../gst-plugins-base/include/gstreamer-1.0"
         export GST_PLUGINS_BASE_LIBS="-L${installdir}/../gst-plugins-base/lib -lgstvideo-1.0"
-        export GST_PLUGINS_BAD_CFLAGS="-I${installdir}/../gst-plugins-bad/include/gstreamer-1.0"
+        export
+        GST_PLUGINS_BAD_CFLAGS="-I${installdir}/../gst-plugins-bad/include/gstreamer-1.0 -I${installdir}/../gst-plugins-bad/lib/gstreamer-1.0/include"
         export GIO_LIBS="-L${installdir}/../glib/lib -lgio-2.0"
         export ORC_CFLAGS="-I${installdir}/../orc-${ORC_VERSION}/include/orc-0.4"
         export ORC_LIBS="-L${installdir}/../orc-${ORC_VERSION}/lib -lorc-0.4"
         export GST_TOOLS_DIR="${installdir}/../gstreamer/bin"
         export GST_PREFIX="${installdir}/../gstreamer"
         export GST_LIBS="-L${installdir}/../gstreamer/lib -lgstreamer-1.0 "$GLIB_LIBS
-        export OPENH264_LIBS="-L${installdir}/../openh264/lib -lopenh264"
-        export OPENH264_CFLAGS="-I${installdir}/../openh264/include"
-        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 "$GLIB_CFLAGS
+        export GST_CFLAGS="-I${installdir}/../gstreamer/include/gstreamer-1.0 -I${installdir}/../gstreamer/lib/gstreamer-1.0/include "$GLIB_CFLAGS
         export GST_BASE_LIBS=$GST_LIBS" -lgstbase-1.0"
         export GST_CHECK_LIBS="$GST_LIBS -lgstcheck-1.0"
         export GST_CONTROLLER_LIBS="$GST_LIBS -lgstcontroller-1.0"
@@ -151,11 +150,11 @@ build() {
         export GST_CONTROLLER_CFLAGS=$GST_CFLAGS
         export GST_GDP_CFLAGS=$GST_CFLAGS
 
-        export CFLAGS="$CFLAGS $GST_CFLAGS $GST_PLUGINS_BASE_CFLAGS $XML_CFLAGS $FFI_CFLAGS $OPENH264_CFLAGS $OPENSSL_CFLAGS -DGST_PLUGIN_BUILD_STATIC"
+        export CFLAGS="$CFLAGS $GST_CFLAGS $GST_PLUGINS_BASE_CFLAGS $XML_CFLAGS $FFI_CFLAGS $OPENSSL_CFLAGS -DGST_PLUGIN_BUILD_STATIC"
         export LDFLAGS="$LDFLAGS $XML_LIBS"
         export CXXFLAGS="$CFLAGS $PLATFORM_CXXFLAGS"
         export OBJCFLAGS="$CFLAGS -fno-objc-arc"
-        export LIBS="-lxml2 $GST_BASE_LIBS $GST_PLUGINS_BASE_LIBS $GIO_LIBS $ORC_LIBS $GST_LIBS $FFI_LIBS $OPENH264_LIBS $OPENSSL_LIBS $LIBS"
+        export LIBS="-lxml2 $GST_BASE_LIBS $GST_PLUGINS_BASE_LIBS $GIO_LIBS $ORC_LIBS $GST_LIBS $FFI_LIBS $OPENSSL_LIBS $LIBS"
 
         export CFLAGS="$CFLAGS ${extra_cflags} ${optimize}"
 

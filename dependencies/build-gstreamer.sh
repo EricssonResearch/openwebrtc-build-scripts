@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-GST_VERSION="1.4"
+GST_VERSION="21321ce67419c26ff67c4faa768833877eba68b8"
 LIBFFI_VERSION="3.0.13"
 LIBXML2_VERSION="2.7.8"
 
@@ -16,7 +16,7 @@ check_preconditions() {
 install_sources(){
     git clone git://anongit.freedesktop.org/git/gstreamer/gstreamer $BUILD_DIR
     pushd $BUILD_DIR > /dev/null
-    git reset --hard origin/$GST_VERSION
+    git reset --hard $GST_VERSION
 
     popd > /dev/null
 
