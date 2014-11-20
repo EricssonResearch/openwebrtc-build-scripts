@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-PYGOBJECT_VERSION=3.4.2
+PYGOBJECT_VERSION=3.10.2
 
 BUILD_DIR=pygobject
 SCRIPT_DIR=../engine
