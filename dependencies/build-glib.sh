@@ -40,6 +40,11 @@ patch_sources(){
             echo "ERROR: Could not checkout ${target_triple} in $(pwd)"
             exit 1
         }
+        git apply --index ../glib-osx-thread-set-name.patch || {
+            echo "ERROR: Could not patch ${target_triple} in $(pwd)"
+            exit 1
+        }
+        git commit --no-verify -m "Implement g_system_thread_set_name on OS X and iOS"
 
         if [[ $target_triple == "arm-linux-androideabi" ]]; then
             cp ${home}/config.{guess,sub} .
