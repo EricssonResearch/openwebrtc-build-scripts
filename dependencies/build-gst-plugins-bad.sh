@@ -23,6 +23,7 @@ install_sources() {
     (
         cd $BUILD_DIR
         git reset --hard $GST_VERSION
+        git revert --no-edit 5f8a3fa0a3bf4712b06e5a799ebede6fd3ae81c4 || die "Failed to revert X-detection using pkg-config"
     )
 }
 
