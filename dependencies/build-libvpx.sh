@@ -12,7 +12,7 @@ check_preconditions() {
 }
 
 install_sources() {
-    git clone http://git.chromium.org/webm/libvpx.git $BUILD_DIR
+    git clone https://chromium.googlesource.com/webm/libvpx $BUILD_DIR
     pushd $BUILD_DIR > /dev/null
     git reset --hard v$LIBVPX_VERSION
 
