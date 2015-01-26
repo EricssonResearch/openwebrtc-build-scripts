@@ -125,12 +125,20 @@ build(){
             local extra_configure_flags="--disable-selinux"
         fi
 
+        extra_configure_flags+=" --enable-debug="
+        [[ $do_release == yes ]] && {
+            extra_configure_flags+="no"
+        } || {
+            extra_configure_flags+="yes"
+            # Our CFLAGS export overrides autogen.sh's, so we must add -g ourselves
+            export CFLAGS="$CFLAGS -g"
+        }
+
         ${home}/$BUILD_DIR/autogen.sh \
             --prefix=${installdir} \
             --host=${target_triple} \
             --enable-static \
             --disable-shared \
-            --enable-debug=no \
                 --disable-compile-warnings \
                 --disable-libelf \
                 --disable-dependency-tracking \
