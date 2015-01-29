@@ -14,7 +14,6 @@ m4/
 nasm/
 pkg-config/
 pygobject/
-python-twisted/
 xz/
 yasm/
 webkit-style-check/

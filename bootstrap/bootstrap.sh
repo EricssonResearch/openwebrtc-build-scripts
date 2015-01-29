@@ -59,7 +59,6 @@ build_all()
         ./build-gnome-common.sh $@ && \
         ./build-gobject-introspection.sh $@ && \
         ./build-pygobject.sh $@ && \
-        ./build-python-twisted.sh $@ && \
         ./build-yasm.sh $@ && \
         ./build-nasm.sh $@ && \
         ./build-graphviz.sh $@ && \
