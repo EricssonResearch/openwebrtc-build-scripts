@@ -15,7 +15,7 @@ check_preconditions() {
 install_sources() {
     git clone https://github.com/GNOME/seed.git $BUILD_DIR
     pushd $BUILD_DIR > /dev/null
-    git reset --hard 4a325e2107eeb4cc8fad489929a5a6ef52bc67dd
+    git reset --hard a015bdb33c3bdd7f250a842c7be8062d483598b8
     popd > /dev/null
 }
 
