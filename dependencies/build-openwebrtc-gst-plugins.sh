@@ -143,6 +143,8 @@ build() {
         export OPENSSL_LIBS="-L${installdir}/../openssl-${OPENSSL_VERSION}/lib -lssl -lcrypto"
         export FFI_CFLAGS="-I${installdir}/../libffi/include"
         export FFI_LIBS="-L${installdir}/../libffi/lib -lffi"
+        export USRSCTP_CFLAGS="-I${installdir}/../libusrsctp/include"
+        export USRSCTP_LIBS="-L${installdir}/../libusrsctp/lib -lusrsctp"
 
         export GIO_CFLAGS=$GLIB_CFLAGS
         export GST_BASE_CFLAGS=$GST_CFLAGS
@@ -150,11 +152,11 @@ build() {
         export GST_CONTROLLER_CFLAGS=$GST_CFLAGS
         export GST_GDP_CFLAGS=$GST_CFLAGS
 
-        export CFLAGS="$CFLAGS $GST_CFLAGS $GST_PLUGINS_BASE_CFLAGS $XML_CFLAGS $FFI_CFLAGS $OPENSSL_CFLAGS -DGST_PLUGIN_BUILD_STATIC"
+        export CFLAGS="$CFLAGS $GST_CFLAGS $GST_PLUGINS_BASE_CFLAGS $XML_CFLAGS $FFI_CFLAGS $OPENSSL_CFLAGS $USRSCTP_CFLAGS -DGST_PLUGIN_BUILD_STATIC"
         export LDFLAGS="$LDFLAGS $XML_LIBS"
         export CXXFLAGS="$CFLAGS $PLATFORM_CXXFLAGS"
         export OBJCFLAGS="$CFLAGS -fno-objc-arc"
-        export LIBS="-lxml2 $GST_BASE_LIBS $GST_PLUGINS_BASE_LIBS $GIO_LIBS $ORC_LIBS $GST_LIBS $FFI_LIBS $OPENSSL_LIBS $LIBS"
+        export LIBS="-lxml2 $GST_BASE_LIBS $GST_PLUGINS_BASE_LIBS $GIO_LIBS $ORC_LIBS $GST_LIBS $FFI_LIBS $OPENSSL_LIBS $USRSCTP_LIBS $LIBS"
 
         export CFLAGS="$CFLAGS ${extra_cflags} ${optimize}"
 
