@@ -94,6 +94,7 @@ build() {
             --prefix=${installdir} \
             --host=${target_triple} \
             --enable-static \
+            --enable-static-plugins \
             --disable-shared \
             --with-gstreamer \
             --disable-compile-warnings \
