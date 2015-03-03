@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-OPENSSL_VERSION="1.0.1h"
+OPENSSL_VERSION="1.0.2"
 
 BUILD_DIR=libsrtp
 SCRIPT_DIR=../engine
