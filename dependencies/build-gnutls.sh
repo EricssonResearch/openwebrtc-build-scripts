@@ -14,7 +14,7 @@ check_preconditions() {
 }
 
 install_sources() {
-    git clone git://gitorious.org/gnutls/gnutls.git $BUILD_DIR
+    git clone https://gitlab.com/gnutls/gnutls.git $BUILD_DIR
     (
         cd $BUILD_DIR
         git reset --hard gnutls_${GNUTLS_VERSION}
