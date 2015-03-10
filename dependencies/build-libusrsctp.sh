@@ -13,6 +13,24 @@ install_sources() {
     svn checkout http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp@8932 $BUILD_DIR
 }
 
+patch_sources() {
+    local target_triple=$2
+    echo "Patch sources for ${target_triple}"
+
+    if [[ $target_triple == "arm-linux-androideabi" ]]; then
+        (
+            cd $BUILD_DIR/usrsctplib
+            cat Makefile.am | sed "s/sctp_os_userspace.h/sctp_os_userspace.h ifaddrs.c ifaddrs.h/" > Makefile.am.bak
+            mv Makefile.am.bak Makefile.am
+            curl -O https://raw.githubusercontent.com/nirbheek/cerbero/43af1b204c6b6dbac88fdd4252f706b3fc4586c8/recipes/libusrsctp/ifaddrs.c
+            curl -O https://raw.githubusercontent.com/nirbheek/cerbero/43af1b204c6b6dbac88fdd4252f706b3fc4586c8/recipes/libusrsctp/ifaddrs.h
+            git add Makefile.am
+            git add ifaddrs.{c,h}
+            git commit -a -m 'ifaddrs fix'
+            )
+    fi
+}
+
 build() {
     local arch=$1
     local target_triple=$2
@@ -34,20 +52,7 @@ build() {
         export CFLAGS="$CFLAGS -I$builddir/include -D__APPLE_USE_RFC_2292 -U__APPLE__ -D__Userspace_os_Darwin"
     elif [[ $target_triple == "arm-linux-androideabi" ]]; then
         local platform_configure_flags="--host=$arch --disable-inet6"
-        mkdir -p include/linux include/netinet6 include/sys lib
-        cd include
-        cp ${ANDROID_SYSROOT}/usr/include/errno.h .
-        echo -e "#include <pthread.h>\n#include <arpa/inet.h>\n#include <netinet/in.h>\n" >> errno.h
-        echo -e "typedef unsigned long long u_quad_t;\ntypedef uint16_t in_port_t;\n" >> errno.h
-        touch linux/ipv6.h netinet6/ip6_var.h sys/sysctl.h sys/uio.h sys/unistd.h
-        curl -o linux/if_addr.h http://code.metager.de/source/raw/android/4.3/bionic/libc/kernel/common/linux/if_addr.h
-        curl -O https://raw.githubusercontent.com/kmackay/android-ifaddrs/7fcc2a871d9b79f27fcff94bd7f94df8022380ec/ifaddrs.h
-        curl -O https://raw.githubusercontent.com/kmackay/android-ifaddrs/7fcc2a871d9b79f27fcff94bd7f94df8022380ec/ifaddrs.c
-        $CC $CFLAGS -c -o ifaddrs.o ifaddrs.c
-        $AR -q ../lib/libifaddrs.a ifaddrs.o || exit 1
-        cd ..
-        export CFLAGS="$CFLAGS -I$builddir/include -D__Userspace_os_Linux"
-        export LDFLAGS="-L$builddir/lib -lifaddrs"
+        export CFLAGS="$CFLAGS -D__Userspace_os_Linux"
     fi
     export CFLAGS="$CFLAGS -std=c99"
 
