@@ -10,7 +10,7 @@ function install_dependencies {
     target=$2
     if [[ "$target" == "linux" ]]; then
         echo "Using \"sudo -E apt-get\" to install needed dependencies."
-        sudo -E apt-get install g++ curl zlib1g-dev libpulse-dev libv4l-dev libxv-dev libgl1-mesa-dev libglu1-mesa-dev libxml-perl openjade xsltproc python-dev python2.7-dev openjdk-7-jdk subversion git gperf ruby libegl1-mesa-dev
+        sudo -E apt-get install make g++ curl zlib1g-dev libpulse-dev libv4l-dev libxv-dev libgl1-mesa-dev libglu1-mesa-dev libxml-perl openjade xsltproc python-dev python2.7-dev openjdk-7-jdk subversion git gperf ruby libegl1-mesa-dev
     fi
 }
 
