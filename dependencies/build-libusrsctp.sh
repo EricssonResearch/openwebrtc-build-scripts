@@ -20,6 +20,10 @@ patch_sources() {
     if [[ $target_triple == "arm-linux-androideabi" ]]; then
         (
             cd $BUILD_DIR/usrsctplib
+            git checkout $target_triple || {
+                echo "ERROR: Could not checkout ${target_triple} in $(pwd)"
+                exit 1
+            }
             cat Makefile.am | sed "s/sctp_os_userspace.h/sctp_os_userspace.h ifaddrs.c ifaddrs.h/" > Makefile.am.bak
             mv Makefile.am.bak Makefile.am
             curl -O https://raw.githubusercontent.com/nirbheek/cerbero/43af1b204c6b6dbac88fdd4252f706b3fc4586c8/recipes/libusrsctp/ifaddrs.c
@@ -36,6 +40,13 @@ build() {
     local target_triple=$2
     local home=$(pwd)
 
+    (
+        cd $BUILD_DIR
+        git checkout $target_triple || {
+            echo "ERROR: Could not checkout ${target_triple} in ${home}"
+            exit 1
+        }
+        )
     (
     cd ${builddir}
 
