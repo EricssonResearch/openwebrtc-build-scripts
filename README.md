@@ -1,3 +1,5 @@
+# This build method is deprecated, please use [the official build instructions](https://github.com/EricssonResearch/openwebrtc/wiki/Building-OpenWebRTC).
+
 Build scripts for OpenWebRTC
 ============================
 
